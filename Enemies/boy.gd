@@ -52,13 +52,13 @@ func _on_AnimatedSprite_animation_finished():
 		queue_free()
 
 
-func _on_Above_and_Below_body_entered(body):
-	if body.name == "Player" and SM.state_name != "Die":
-		body.die()
+func _on_Above_and_Below_body_entered(_body):
+	pass
 
 
 func _on_above_and_above_body_entered(body):
-	pass # Replace with function body.
+	if body.name == "Player" and SM.state_name != "Die":
+		body.queue_free()
 
 
 func _on_animated_sprite_2d_animation_finished():

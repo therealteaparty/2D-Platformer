@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var Player = load("res://Player/Player.tscn")
+@onready var Player = load("res://Player/player.tscn")
 var starting_position = Vector2(200,200)
 
 

@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 var player = null
 @onready var ray = $See
-@export var speed = 800
+@export var speed = 100
 @export var looking_speed = 100
 var nav_ready = false
 var initial_position = Vector2.ZERO
@@ -45,18 +45,21 @@ func _physics_process(_delta):
 			velocity = Vector2.ZERO
 		move_and_slide()
 
-
-func _on_attack_body_entered(body):
-	if body.name == "Player":
-		body.die()
-		queue_free()
-
+func die(): 
+	$AnimatedSprite2D.play("Dying")
+	queue_free()
 
 func _on_above_and_below_body_entered(body):
 	if body.name == "Player":
-		body.die()
+		die()
 		queue_free()
+		
+func _on_attack_body_entered(body):
+	if body.name == "Player":
+		body.die()
 
+		
+		
 
 func _on_animated_sprite_2d_animation_finished():
 	pass # Replace with function body.

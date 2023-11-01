@@ -237,7 +237,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v65gd"]
-size = Vector2(51, 5)
+size = Vector2(64, 80)
 
 [node name="Boy" type="CharacterBody2D"]
 position = Vector2(50, 500)
@@ -280,9 +280,10 @@ one_shot = true
 script = ExtResource("9_nckjg")
 
 [node name="Above_And_Above" type="Area2D" parent="."]
+position = Vector2(-2, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Above_And_Above"]
-position = Vector2(-7.5, -33.5)
+position = Vector2(-8, 0)
 shape = SubResource("RectangleShape2D_v65gd")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

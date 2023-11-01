@@ -1488,7 +1488,7 @@ layer_0/tile_data = PackedInt32Array(851969, 1703936, 14, 917505, 1703936, 15, 9
 [node name="Enemy_Container" type="Node2D" parent="."]
 
 [node name="Bat" parent="Enemy_Container" instance=ExtResource("2_j15kk")]
-position = Vector2(200, 500)
+position = Vector2(1000, 200)
 
 [node name="Player_Container" type="Node2D" parent="."]
 script = ExtResource("3_j5wnd")

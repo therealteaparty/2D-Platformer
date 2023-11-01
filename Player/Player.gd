@@ -5,16 +5,16 @@ extends CharacterBody2D
 var jump_power = Vector2.ZERO
 var direction = 1
 
-@export var gravity = Vector2(0,30)
+@export var gravity = Vector2(0,5)
 
-@export var move_speed = 100
-@export var max_move = 1000
+@export var move_speed = 150
+@export var max_move = 300
 
-@export var jump_speed = 200
-@export var max_jump = 4000
+@export var jump_speed = 500
+@export var max_jump = 1500
 
-@export var leap_speed = 200
-@export var max_leap = 2000
+@export var leap_speed = 500
+@export var max_leap = 1500
 
 var moving = false
 var is_jumping = false
@@ -35,8 +35,8 @@ func _physics_process(_delta):
 	
 	if is_on_floor():
 		double_jumped = false
-		if Input.is_action_just_pressed("attack"):
-			SM.set_state("Attacking")
+		#if Input.is_action_just_pressed("attack"):
+			#SM.set_state("Attacking")
 
 func is_moving():
 	if Input.is_action_pressed("left") or Input.is_action_pressed("right"):
@@ -80,4 +80,8 @@ func _on_AnimatedSprite_animation_finished():
 
 
 func _on_timer_timeout():
+	pass # Replace with function body.
+
+
+func _on_animated_sprite_2d_animation_finished():
 	pass # Replace with function body.

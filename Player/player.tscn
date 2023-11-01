@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cpifnk4tqoy6k"]
+[gd_scene load_steps=27 format=3 uid="uid://cpifnk4tqoy6k"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_o0gi7"]
 [ext_resource type="Texture2D" uid="uid://c2pfxwg3gctj5" path="res://Assets/pumpkin cat.png" id="2_cdgkm"]
@@ -10,7 +10,14 @@
 [ext_resource type="Script" path="res://StateMachine/Moving_and_Jumping.gd" id="8_j7lt0"]
 [ext_resource type="Script" path="res://StateMachine/Falling.gd" id="9_dorgd"]
 [ext_resource type="Script" path="res://StateMachine/Boy.gd" id="10_0of0j"]
-[ext_resource type="Script" path="res://StateMachine/Attacking.gd" id="11_gno4n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oxinv"]
+atlas = ExtResource("2_cdgkm")
+region = Rect2(2000, 1250, 1000, 1250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8r74a"]
+atlas = ExtResource("2_cdgkm")
+region = Rect2(2000, 0, 1000, 1250)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jq06y"]
 atlas = ExtResource("2_cdgkm")
@@ -64,10 +71,21 @@ region = Rect2(0, 2500, 1000, 1250)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_oxinv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8r74a")
+}],
+"loop": false,
+"name": &"Attacking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_jq06y")
 }],
 "loop": true,
-"name": &"fall",
+"name": &"Falling",
 "speed": 5.0
 }, {
 "frames": [{
@@ -75,7 +93,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_jlokp")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"Idle",
 "speed": 10.0
 }, {
 "frames": [{
@@ -92,7 +110,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_ay3l8")
 }],
 "loop": true,
-"name": &"jump",
+"name": &"Jumping",
 "speed": 10.0
 }, {
 "frames": [{
@@ -115,7 +133,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_7a4wa")
 }],
 "loop": true,
-"name": &"walk",
+"name": &"Moving",
 "speed": 10.0
 }]
 
@@ -128,8 +146,8 @@ script = ExtResource("1_o0gi7")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.0483407, 0.0476682)
 sprite_frames = SubResource("SpriteFrames_uiamo")
-animation = &"jump"
-autoplay = "walk"
+animation = &"Attacking"
+autoplay = "Moving"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -0.5)
@@ -158,19 +176,12 @@ script = ExtResource("8_j7lt0")
 [node name="Falling" type="Node" parent="StateMachine"]
 script = ExtResource("9_dorgd")
 
-[node name="Boy" type="Node" parent="StateMachine"]
+[node name="Coyote" type="Node" parent="StateMachine"]
 script = ExtResource("10_0of0j")
 
-[node name="Timer" type="Timer" parent="StateMachine/Boy"]
+[node name="Timer" type="Timer" parent="StateMachine/Coyote"]
 wait_time = 0.2
 one_shot = true
 
-[node name="Attacking" type="Node" parent="."]
-script = ExtResource("11_gno4n")
-
-[node name="Timer" type="Timer" parent="Attacking"]
-wait_time = 0.12
-one_shot = true
-
-[connection signal="timeout" from="StateMachine/Boy/Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="Attacking/Timer" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="StateMachine/Coyote/Timer" to="." method="_on_timer_timeout"]
