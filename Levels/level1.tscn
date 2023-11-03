@@ -1,6 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://cpj17gs03nl0r"]
+[gd_scene load_steps=23 format=3 uid="uid://cpj17gs03nl0r"]
 
-[ext_resource type="Script" path="res://StateMachine/Player_Container.gd" id="2_cq2ii"]
+[ext_resource type="Texture2D" uid="uid://c7fevci10ejpl" path="res://Assets/New Piskel-1.png (15).png" id="2_7h46n"]
 [ext_resource type="Script" path="res://Levels/Key.gd" id="2_qxijm"]
 [ext_resource type="Script" path="res://Levels/Door.gd" id="3_37faf"]
 [ext_resource type="Script" path="res://Levels/Camera2D.gd" id="3_gphf3"]
@@ -483,11 +483,67 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/2 = SubResource("TileSetAtlasSource_a3vvv")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p85jb"]
+texture = ExtResource("2_7h46n")
+texture_region_size = Vector2i(50, 50)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12.5, -12.5, 12.5, -12.5, 25, 25, -25, 25)
+
+[sub_resource type="TileSet" id="TileSet_35d8h"]
+tile_size = Vector2i(50, 50)
+physics_layer_0/collision_layer = 255
+physics_layer_0/collision_mask = 511
+sources/1 = SubResource("TileSetAtlasSource_p85jb")
+
+[sub_resource type="GDScript" id="GDScript_32s4h"]
+script/source = "extends TileMap
+
+const BIG_NUMBER = 1000000
+var coins = []
+
+
+func _ready():
+	for x in range(1000):
+		for y in range(1000):
+			if get_cell_source_id(0, Vector2i(x, y)) != -1:
+				coins.append(Vector2(x,y))
+
+
+func get_coins(p):
+	var coords = local_to_map(to_local(p))
+	var min_dist = BIG_NUMBER
+	var which_coin = Vector2.ZERO
+	for c in coins:
+		var d = Vector2(coords).distance_to(c)
+		if d < min_dist:
+			min_dist = d
+			which_coin = c
+	if which_coin != Vector2.ZERO:
+		call_deferred(\"set_cell\", 0, which_coin, -1)
+		#Global.add_coin()
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a8nue"]
 size = Vector2(44, 45)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tkxj7"]
 size = Vector2(175.738, 249.18)
+
+[sub_resource type="GDScript" id="GDScript_rmd6w"]
+script/source = "extends Node2D
+
+@onready var Player = load(\"res://Player/player.tscn\")
+var starting_position = Vector2(200,200)
+
+
+func _physics_process(_delta):
+	if not has_node(\"Player\"):
+		var player = Player.instantiate()
+		player.position = starting_position
+		add_child(player)
+"
 
 [sub_resource type="GDScript" id="GDScript_0ynwr"]
 script/source = "extends Node2D
@@ -1426,8 +1482,8 @@ sources/1 = SubResource("TileSetAtlasSource_o16q2")
 [node name="Game" type="Node2D"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -53.0
-offset_top = -101.0
+offset_left = -128.0
+offset_top = -103.0
 offset_right = 2678.0
 offset_bottom = 617.0
 color = Color(0.439216, 0.27451, 0.129412, 1)
@@ -1436,6 +1492,12 @@ color = Color(0.439216, 0.27451, 0.129412, 1)
 tile_set = SubResource("TileSet_a7qt4")
 format = 2
 layer_0/tile_data = PackedInt32Array(851972, 1703938, 14, 917508, 1703938, 15, 983044, 1703938, 16, 851973, 1769474, 14, 917509, 1769474, 15, 983045, 1769474, 16, 1048581, 1769474, 17, 851974, 1835010, 14, 917510, 1835010, 15, 983046, 1835010, 16, 1048582, 1835010, 17, 1114118, 1835010, 18, 851975, 1900546, 14, 917511, 1900546, 15, 983047, 1900546, 16, 1048583, 1900546, 17, 851976, 1966082, 14, 917512, 1966082, 15, 983048, 1966082, 16, 851979, 1703938, 14, 917515, 1703938, 15, 983051, 1703938, 16, 851980, 1769474, 14, 917516, 1769474, 15, 983052, 1769474, 16, 1048588, 1769474, 17, 851981, 1835010, 14, 917517, 1835010, 15, 983053, 1835010, 16, 1048589, 1835010, 17, 1114125, 1835010, 18, 851982, 1900546, 14, 917518, 1900546, 15, 983054, 1900546, 16, 1048590, 1900546, 17, 851983, 1966082, 14, 917519, 1966082, 15, 983055, 1966082, 16, 786483, 1703938, 14, 852019, 1703938, 15, 917555, 1703938, 16, 786484, 1769474, 14, 852020, 1769474, 15, 917556, 1769474, 16, 983092, 1769474, 17, 786485, 1835010, 14, 852021, 1835010, 15, 917557, 1835010, 16, 983093, 1835010, 17, 1048629, 1835010, 18, 786486, 1900546, 14, 852022, 1900546, 15, 917558, 1900546, 16, 983094, 1900546, 17, 786487, 1966082, 14, 852023, 1966082, 15, 917559, 1966082, 16, 852024, 1703938, 14, 917560, 1703938, 15, 983096, 1703938, 16, 852025, 1769474, 14, 917561, 1769474, 15, 983097, 1769474, 16, 1048633, 1769474, 17, 852026, 1835010, 14, 917562, 1835010, 15, 983098, 1835010, 16, 1048634, 1835010, 17, 1114170, 1835010, 18, 852027, 1900546, 14, 917563, 1900546, 15, 983099, 1900546, 16, 1048635, 1900546, 17, 852028, 1966082, 14, 917564, 1966082, 15, 983100, 1966082, 16, 852042, 1703938, 14, 917578, 1703938, 15, 983114, 1703938, 16, 852043, 1769474, 14, 917579, 1769474, 15, 983115, 1769474, 16, 1048651, 1769474, 17, 852044, 1835010, 14, 917580, 1835010, 15, 983116, 1835010, 16, 1048652, 1835010, 17, 1114188, 1835010, 18, 852045, 1900546, 14, 917581, 1900546, 15, 983117, 1900546, 16, 1048653, 1900546, 17, 852046, 1966082, 14, 917582, 1966082, 15, 983118, 1966082, 16, 917573, 1376258, 15, 983109, 1376258, 16, 1048645, 1376258, 17, 917574, 1441794, 15, 983110, 1441794, 16, 1048646, 1441794, 17, 852039, 1507330, 14, 917575, 1507330, 15, 983111, 1507330, 16, 1048647, 1507330, 17, 1114183, 1507330, 18, 917576, 1572866, 15, 983112, 1572866, 16, 1048648, 1572866, 17, 917577, 1638402, 15, 983113, 1638402, 16, 1048649, 1638402, 17, 983039, 1376258, 15, 1048575, 1376258, 16, 1114111, 1835010, 8, 917504, 1441794, 15, 983040, 1441794, 16, 1048576, 1441794, 17, 851969, 1507330, 14, 917505, 1507330, 15, 983041, 1507330, 16, 1048577, 1507330, 17, 1114113, 1507330, 18, 917506, 1572866, 15, 983042, 1572866, 16, 1048578, 1572866, 17, 917507, 1638402, 15, 983043, 1638402, 16, 1048579, 1245186, 17, 1114140, 1179650, 18, 1048608, 1245186, 17, 1114144, 1245186, 18, 1114145, 1310722, 18, 1048615, 1179650, 18, 983080, 1245186, 17, 1048616, 1245186, 18, 1048617, 1310722, 18, 1048586, 1245186, 17, 1114122, 1245186, 18, 1114123, 1310722, 18, 1114114, 1179650, 18, 1114115, 1245186, 18, 1114116, 1310722, 18, 1114126, 1179650, 18, 1048591, 1245186, 17, 1114127, 1245186, 18, 1114128, 1310722, 18, 851993, 1179650, 18, 786458, 1245186, 17, 851994, 1245186, 18, 851995, 1310722, 18, 589863, 1179650, 18, 524328, 1245186, 17, 589864, 1245186, 18, 589865, 1310722, 18, 589866, 1179650, 18, 524331, 1245186, 17, 589867, 1245186, 18, 589868, 1310722, 18, 1114137, 720898, 18, 1114138, 786434, 18, 720927, 720898, 18, 720928, 786434, 18, 983085, 720898, 18, 983086, 786434, 18, 1048630, 720898, 18, 1048631, 786434, 18, 1114184, 720898, 18, 1114185, 786434, 18, 1114189, 720898, 18, 1114190, 786434, 18, 1114181, 720898, 18, 1114182, 786434, 18, 1114119, 720898, 18, 1114120, 786434, 18, 1114133, 786434, 1, 1114134, 1179650, 3, 983087, 786434, 16, 589871, 851970, 16, 589872, 1835010, 9, 589873, 786434, 16, 589874, 851970, 16, 589875, 917506, 16, 589876, 786434, 16, 589877, 851970, 16, 589878, 917506, 16, 786494, 786434, 16, 786495, 851970, 16, 786496, 1245186, 3, 1114172, 786434, 16, 1114173, 851970, 16, 1114174, 917506, 16, 1114175, 786434, 16, 1114176, 1245186, 3, 1114177, 1441794, 9, 1114192, 1769474, 9, 1114193, 1835010, 9, 1114194, 917506, 16, 1179646, 1769474, 9, 1179647, 1835010, 9, 983082, 786434, 16, 983083, 851970, 16, 983084, 1179650, 3, 1048597, 786434, 0, 1114124, 1179650, 3, 851991, 1179650, 3, 786497, 1179650, 3, 589861, 1245186, 3, 983105, 1441794, 7, 1048641, 1441794, 8, 983106, 1507330, 7, 1048642, 1507330, 8, 1114178, 1507330, 9, 524336, 1835010, 8, 1114110, 1769474, 8, 1048656, 1769474, 8, 1048657, 1835010, 8, 720934, 1966082, 0, 720942, 1966082, 0, 720938, 1966082, 0, 720946, 1966082, 0)
+
+[node name="Coins" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_35d8h")
+format = 2
+layer_0/tile_data = PackedInt32Array(655366, 1, 0, 655371, 1, 0, 524317, 1, 0, 262177, 1, 0, 655400, 1, 0, 655407, 1, 0)
+script = SubResource("GDScript_32s4h")
 
 [node name="Key" type="Node2D" parent="."]
 script = ExtResource("2_qxijm")
@@ -1477,12 +1539,13 @@ position = Vector2(-1.31152, 35.4098)
 shape = SubResource("RectangleShape2D_tkxj7")
 
 [node name="Player_Container" type="Node2D" parent="."]
-script = ExtResource("2_cq2ii")
+script = SubResource("GDScript_rmd6w")
 
 [node name="Enemy_Container" type="Node2D" parent="."]
 script = SubResource("GDScript_0ynwr")
 
 [node name="Boy" parent="Enemy_Container" instance=ExtResource("4_4v0du")]
+position = Vector2(1300, 500)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_left = -90
@@ -1500,6 +1563,31 @@ layer_0/tile_data = PackedInt32Array(1245184, 65536, 1, 1245185, 65536, 1, 12451
 tile_set = SubResource("TileSet_4llbk")
 format = 2
 layer_0/tile_data = PackedInt32Array(524333, 327681, 10, 589869, 327681, 11, 524334, 393217, 10, 589870, 393217, 11, 524335, 458753, 10, 589871, 458753, 11, 1048643, 327681, 10, 1114179, 327681, 11, 1048644, 393217, 10, 1114180, 393217, 11, 1048645, 458753, 10, 1114181, 458753, 11, 1048638, 458753, 7, 917552, 393217, 7, 983088, 393217, 8, 917553, 458753, 7, 983089, 458753, 8, 983071, 65537, 5, 1048607, 65537, 6, 1114143, 65537, 7, 983072, 131073, 5, 1048608, 131073, 6, 1114144, 131073, 7, 983073, 196609, 5, 1048609, 196609, 6, 1114145, 196609, 7, 1114146, 262145, 7)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/HUD"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -3.0
+offset_right = 1258.0
+offset_bottom = 53.0
+color = Color(0.223529, 0, 0, 0.258824)
+
+[node name="Coins" type="Label" parent="UI/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 1057.0
+offset_bottom = 44.0
 
 [connection signal="body_entered" from="Key/Area2D" to="Key" method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Door/Area2D" to="Door" method="_on_area_2d_body_entered"]

@@ -1,23 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://cpifnk4tqoy6k"]
+[gd_scene load_steps=20 format=3 uid="uid://cpifnk4tqoy6k"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_o0gi7"]
 [ext_resource type="Texture2D" uid="uid://c2pfxwg3gctj5" path="res://Assets/pumpkin cat.png" id="2_cdgkm"]
 [ext_resource type="Texture2D" uid="uid://dac4isdgw2ksp" path="res://Assets/pumpkin cat-3.png.png" id="3_7rukf"]
-[ext_resource type="Script" path="res://StateMachine/StateMachine.gd" id="4_ojdth"]
-[ext_resource type="Script" path="res://StateMachine/Idle.gd" id="5_hcao0"]
-[ext_resource type="Script" path="res://StateMachine/Moving.gd" id="6_mbvrp"]
-[ext_resource type="Script" path="res://StateMachine/Jumping.gd" id="7_d1cqp"]
-[ext_resource type="Script" path="res://StateMachine/Moving_and_Jumping.gd" id="8_j7lt0"]
-[ext_resource type="Script" path="res://StateMachine/Falling.gd" id="9_dorgd"]
-[ext_resource type="Script" path="res://StateMachine/Boy.gd" id="10_0of0j"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oxinv"]
-atlas = ExtResource("2_cdgkm")
-region = Rect2(2000, 1250, 1000, 1250)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8r74a"]
-atlas = ExtResource("2_cdgkm")
-region = Rect2(2000, 0, 1000, 1250)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jq06y"]
 atlas = ExtResource("2_cdgkm")
@@ -71,21 +56,10 @@ region = Rect2(0, 2500, 1000, 1250)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_oxinv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8r74a")
-}],
-"loop": false,
-"name": &"Attacking",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_jq06y")
 }],
 "loop": true,
-"name": &"Falling",
+"name": &"fall",
 "speed": 5.0
 }, {
 "frames": [{
@@ -93,7 +67,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_jlokp")
 }],
 "loop": true,
-"name": &"Idle",
+"name": &"idle",
 "speed": 10.0
 }, {
 "frames": [{
@@ -110,7 +84,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_ay3l8")
 }],
 "loop": true,
-"name": &"Jumping",
+"name": &"jump",
 "speed": 10.0
 }, {
 "frames": [{
@@ -133,55 +107,44 @@ animations = [{
 "texture": SubResource("AtlasTexture_7a4wa")
 }],
 "loop": true,
-"name": &"Moving",
+"name": &"walk",
 "speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xesfe"]
 size = Vector2(41, 49)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_maxa5"]
+size = Vector2(50, 55)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_87wm5"]
+size = Vector2(46, 52)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_o0gi7")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.0483407, 0.0476682)
 sprite_frames = SubResource("SpriteFrames_uiamo")
-animation = &"Attacking"
-autoplay = "Moving"
+animation = &"idle"
+autoplay = "walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, -0.5)
 scale = Vector2(1.00568, 1.00994)
 shape = SubResource("RectangleShape2D_xesfe")
 
-[node name="Attack" type="RayCast2D" parent="."]
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="Attack_low" type="RayCast2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_maxa5")
 
-[node name="StateMachine" type="Node" parent="."]
-script = ExtResource("4_ojdth")
+[node name="Coin_Collector" type="Area2D" parent="."]
 
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("5_hcao0")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coin_Collector"]
+shape = SubResource("RectangleShape2D_87wm5")
 
-[node name="Moving" type="Node" parent="StateMachine"]
-script = ExtResource("6_mbvrp")
-
-[node name="Jumping" type="Node" parent="StateMachine"]
-script = ExtResource("7_d1cqp")
-
-[node name="Moving_and_Jumping" type="Node" parent="StateMachine"]
-script = ExtResource("8_j7lt0")
-
-[node name="Falling" type="Node" parent="StateMachine"]
-script = ExtResource("9_dorgd")
-
-[node name="Coyote" type="Node" parent="StateMachine"]
-script = ExtResource("10_0of0j")
-
-[node name="Timer" type="Timer" parent="StateMachine/Coyote"]
-wait_time = 0.2
-one_shot = true
-
-[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="timeout" from="StateMachine/Coyote/Timer" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="Coin_Collector" to="." method="_on_coin_collector_body_entered"]

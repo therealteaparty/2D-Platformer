@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://bo8sje5di8kw" path="res://Assets/boy_attack.png" id="1_jrk86"]
 [ext_resource type="Texture2D" uid="uid://db1bpqil4f52h" path="res://Assets/boy_die.png" id="2_fbl30"]
 [ext_resource type="Texture2D" uid="uid://cxywls4lnh7h0" path="res://Assets/knife_boy.png" id="3_5pp2r"]
-[ext_resource type="Script" path="res://StateMachine/StateMachine.gd" id="5_jjku7"]
 [ext_resource type="Script" path="res://Enemies/Boy_Idle.gd" id="6_f1sfl"]
 [ext_resource type="Script" path="res://Enemies/Boy_Move.gd" id="7_6m2se"]
 [ext_resource type="Script" path="res://Enemies/Boy_Attack.gd" id="8_f63ls"]
@@ -236,8 +235,46 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="GDScript" id="GDScript_ed8cj"]
+script/source = "extends Node
+
+@onready var state = null
+@onready var previous_state = null
+@onready var state_name = \"\"
+
+func _ready():
+	if get_child_count():
+		set_state(get_children()[0].name)
+
+func _physics_process(delta):
+	if state and state.has_method(\"physics_process\"):
+		state.physics_process(delta)
+
+func _process(delta):
+	if state and state.has_method(\"process\"):
+		state.process(delta)
+
+func _unhandled_input(event):
+	if state and state.has_method(\"unhandled_input\"):
+		state.unhandled_input(event)
+
+func set_state(s):
+	state_name = s
+	var new_state = get_node(NodePath(s))
+	if new_state != null:
+		if state != null:
+			if state.has_method(\"end\"):
+				state.end()
+			previous_state = state
+		state = new_state
+		if state.has_method(\"start\"):
+			state.start()
+	else:
+		state = null
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v65gd"]
-size = Vector2(64, 80)
+size = Vector2(40, 80)
 
 [node name="Boy" type="CharacterBody2D"]
 position = Vector2(50, 500)
@@ -262,7 +299,7 @@ target_position = Vector2(-37, 0)
 target_position = Vector2(-85, 0)
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("5_jjku7")
+script = SubResource("GDScript_ed8cj")
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("6_f1sfl")
@@ -283,7 +320,7 @@ script = ExtResource("9_nckjg")
 position = Vector2(-2, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Above_And_Above"]
-position = Vector2(-8, 0)
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_v65gd")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

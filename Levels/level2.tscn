@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://75mack4un207" path="res://Assets/TX Village Props.png" id="1_rnf5e"]
 [ext_resource type="PackedScene" uid="uid://binweej08mjlw" path="res://Enemies/bat.tscn" id="2_j15kk"]
-[ext_resource type="Script" path="res://StateMachine/Player_Container.gd" id="3_j5wnd"]
 [ext_resource type="Script" path="res://Levels/Camera2D.gd" id="5_fhvuj"]
 [ext_resource type="Texture2D" uid="uid://clgcm87ymtug7" path="res://Assets/TX Tileset Ground.png" id="6_d1wvg"]
 
@@ -478,6 +477,20 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_fbaf5"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_763u2")
+
+[sub_resource type="GDScript" id="GDScript_rmd6w"]
+script/source = "extends Node2D
+
+@onready var Player = load(\"res://Player/player.tscn\")
+var starting_position = Vector2(200,200)
+
+
+func _physics_process(_delta):
+	if not has_node(\"Player\"):
+		var player = Player.instantiate()
+		player.position = starting_position
+		add_child(player)
+"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wpok8"]
 texture = ExtResource("6_d1wvg")
@@ -1491,7 +1504,7 @@ layer_0/tile_data = PackedInt32Array(851969, 1703936, 14, 917505, 1703936, 15, 9
 position = Vector2(1000, 200)
 
 [node name="Player_Container" type="Node2D" parent="."]
-script = ExtResource("3_j5wnd")
+script = SubResource("GDScript_rmd6w")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_left = -90
