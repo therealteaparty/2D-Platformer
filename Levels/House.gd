@@ -16,5 +16,5 @@ func _process(_delta):
 func _on_area_2d_body_entered(body):
 	var key = get_node("/root/Game/Key").get("key")
 	if body.name == "Player" and key == 1:
-		get_tree().change_scene_to_file("res://Levels/level2.tscn")
+		get_tree().change_scene_to_file("res://UI/end.tscn")
 		

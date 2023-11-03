@@ -2,9 +2,31 @@ extends Node
 
 var coins = 0
 
-func _unhandled_input(event):
-	if event.is_action_pressed("quit"):
-		get_tree().quit()
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+func _process(_delta):
+	if Input.is_action_just_pressed("Quit"):
+		var menu = get_node_or_null("/root/Game/UI/Menu")
+		if menu == null:
+			get_tree().quit()
+		else:
+			if menu.visible:
+				get_tree().paused = false
+				menu.hide()
+			else:
+				get_tree().paused = true
+				menu.show()
+				
+	var key = get_node_or_null("/root/Game/Key")
+	var KEYFOUND = get_node_or_null("/root/Game/UI/HUD/KeyFound")
+	if key != null:
+		key = get_node("/root/Game/Key").get("key")
+		if key == 0:
+			KEYFOUND.text = "KEY: NOT FOUND"
+		else: 
+			KEYFOUND.text = "KEY: FOUND"
+
 
 func add_coin():
 	coins += 1

@@ -56,7 +56,7 @@ func _on_above_and_below_body_entered(body):
 		
 func _on_attack_body_entered(body):
 	if body.name == "Player":
-		body.die()
+		body.queue_free()
 
 		
 		

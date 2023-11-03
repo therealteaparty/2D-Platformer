@@ -6,7 +6,8 @@ const JUMP_VELOCITY = -400.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-
+#var key1 = 0
+#var key2 = 0
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -39,10 +40,18 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _on_area_2d_body_entered(body):
-	if body.name == "Boy" or body.name == "Bat":
+	if body.name == "Boy" or body.name == "Bat" or body.name == "Bat2":
 		queue_free()
+	#if body.name == "Key":
+		#key1 == 1
+	#if body.name == "Key2":
+		#key2 == 1
 
 
 func _on_coin_collector_body_entered(body):
 	if body.name == "Coins":
 		body.get_coins(global_position)
+
+
+func _on_feet_body_entered(_body):
+	$FeetParticles.emitting = true
