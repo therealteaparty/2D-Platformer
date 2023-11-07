@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_klf6c")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
 offset_right = 1155.0
 offset_bottom = 648.0
 color = Color(0.843137, 0.564706, 0.360784, 0.639216)

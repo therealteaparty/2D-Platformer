@@ -40,13 +40,8 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _on_area_2d_body_entered(body):
-	if body.name == "Boy" or body.name == "Bat" or body.name == "Bat2":
+	if body.name == "Boy":
 		queue_free()
-	#if body.name == "Key":
-		#key1 == 1
-	#if body.name == "Key2":
-		#key2 == 1
-
 
 func _on_coin_collector_body_entered(body):
 	if body.name == "Coins":
@@ -55,3 +50,8 @@ func _on_coin_collector_body_entered(body):
 
 func _on_feet_body_entered(_body):
 	$FeetParticles.emitting = true
+
+
+func _on_bat_area_body_entered(body):
+	if body.name == "Bat" or body.name == "Bat2":
+		body.queue_free()

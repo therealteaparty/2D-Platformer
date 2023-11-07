@@ -1,13 +1,12 @@
-[gd_scene load_steps=41 format=3 uid="uid://pucd88fjtsst"]
+[gd_scene load_steps=39 format=3 uid="uid://pucd88fjtsst"]
 
 [ext_resource type="Script" path="res://Enemies/boy.gd" id="1_alion"]
 [ext_resource type="Texture2D" uid="uid://bo8sje5di8kw" path="res://Assets/boy_attack.png" id="1_jrk86"]
 [ext_resource type="Texture2D" uid="uid://db1bpqil4f52h" path="res://Assets/boy_die.png" id="2_fbl30"]
 [ext_resource type="Texture2D" uid="uid://cxywls4lnh7h0" path="res://Assets/knife_boy.png" id="3_5pp2r"]
-[ext_resource type="Script" path="res://Enemies/Boy_Idle.gd" id="6_f1sfl"]
-[ext_resource type="Script" path="res://Enemies/Boy_Move.gd" id="7_6m2se"]
-[ext_resource type="Script" path="res://Enemies/Boy_Attack.gd" id="8_f63ls"]
-[ext_resource type="Script" path="res://Enemies/Boy_Die.gd" id="9_nckjg"]
+[ext_resource type="Script" path="res://StateMachine/StateMachine.gd" id="5_eurya"]
+[ext_resource type="Script" path="res://StateMachine/Moving.gd" id="6_ksb2l"]
+[ext_resource type="Script" path="res://StateMachine/Idle.gd" id="7_6k7cu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cimmx"]
 atlas = ExtResource("1_jrk86")
@@ -235,44 +234,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="GDScript" id="GDScript_ed8cj"]
-script/source = "extends Node
-
-@onready var state = null
-@onready var previous_state = null
-@onready var state_name = \"\"
-
-func _ready():
-	if get_child_count():
-		set_state(get_children()[0].name)
-
-func _physics_process(delta):
-	if state and state.has_method(\"physics_process\"):
-		state.physics_process(delta)
-
-func _process(delta):
-	if state and state.has_method(\"process\"):
-		state.process(delta)
-
-func _unhandled_input(event):
-	if state and state.has_method(\"unhandled_input\"):
-		state.unhandled_input(event)
-
-func set_state(s):
-	state_name = s
-	var new_state = get_node(NodePath(s))
-	if new_state != null:
-		if state != null:
-			if state.has_method(\"end\"):
-				state.end()
-			previous_state = state
-		state = new_state
-		if state.has_method(\"start\"):
-			state.start()
-	else:
-		state = null
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v65gd"]
 size = Vector2(40, 80)
 
@@ -284,37 +245,22 @@ script = ExtResource("1_alion")
 position = Vector2(-1.90735e-06, 1.90735e-06)
 scale = Vector2(0.17, 0.17)
 sprite_frames = SubResource("SpriteFrames_qtrh7")
-animation = &"Attacking"
+animation = &"Moving"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(14, 13, 15, 42, -11, 43, -12, 18, -18, 11, -40, -11, -35, -16, -22, -5, -16, -10, -16, -21, -11, -30, 1, -35, 13, -32, 17, -23, 16, -7)
 
 [node name="Can_Jump" type="RayCast2D" parent="."]
-target_position = Vector2(-58, -60)
-
-[node name="Attack" type="RayCast2D" parent="."]
-target_position = Vector2(-37, 0)
-
-[node name="See" type="RayCast2D" parent="."]
-target_position = Vector2(-85, 0)
+target_position = Vector2(-50, -52)
 
 [node name="StateMachine" type="Node" parent="."]
-script = SubResource("GDScript_ed8cj")
-
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("6_f1sfl")
+script = ExtResource("5_eurya")
 
 [node name="Move" type="Node" parent="StateMachine"]
-script = ExtResource("7_6m2se")
+script = ExtResource("6_ksb2l")
 
-[node name="Attack" type="Node" parent="StateMachine"]
-script = ExtResource("8_f63ls")
-
-[node name="Timer" type="Timer" parent="StateMachine/Attack"]
-one_shot = true
-
-[node name="Die" type="Node" parent="StateMachine"]
-script = ExtResource("9_nckjg")
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("7_6k7cu")
 
 [node name="Above_And_Above" type="Area2D" parent="."]
 position = Vector2(-2, 4)
@@ -324,5 +270,4 @@ position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_v65gd")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="timeout" from="StateMachine/Attack/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="Above_And_Above" to="." method="_on_above_and_above_body_entered"]

@@ -1532,7 +1532,7 @@ layer_0/tile_data = PackedInt32Array(786483, 1703938, 14, 852019, 1703938, 15, 9
 [node name="Coins" type="TileMap" parent="."]
 tile_set = ExtResource("2_72ogm")
 format = 2
-layer_0/tile_data = PackedInt32Array(655366, 1, 0, 655371, 1, 0, 524317, 1, 0, 262177, 1, 0, 655400, 1, 0, 655407, 1, 0)
+layer_0/tile_data = PackedInt32Array(655366, 1, 0, 655371, 1, 0, 524317, 1, 0, 262177, 1, 0, 393236, 1, 0, 262170, 1, 0)
 script = SubResource("GDScript_32s4h")
 
 [node name="Key" type="Node2D" parent="."]
@@ -1583,7 +1583,7 @@ script = SubResource("GDScript_rmd6w")
 script = SubResource("GDScript_0ynwr")
 
 [node name="Boy" parent="Enemy_Container" instance=ExtResource("4_4v0du")]
-position = Vector2(1300, 500)
+position = Vector2(1400, 450)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_left = -90
@@ -1628,6 +1628,7 @@ offset_right = 1057.0
 offset_bottom = 55.0
 theme = ExtResource("11_l7h5w")
 theme_override_font_sizes/font_size = 30
+text = "APPLES: "
 
 [node name="KeyFound" type="Label" parent="UI/HUD"]
 layout_mode = 0
