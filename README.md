@@ -5,20 +5,24 @@ Built with Godot 4.1
 
 Original player sprites (Player, Knife Boy, Key, Door, Particles) created with Piskel.com
 
+Music created with BeepBox
+
 Additional Features:
 
  
 	1. Original sprites
+
+ 	2. OST
  
-	2. Multiple levels
+	3. Multiple levels
  
-	3. Particles (key, player landing)
+	4. Particles (key, player landing)
  
-	4. Parallax/Animated background
+	5. Parallax/Animated background
  
-	5. Door/Key interaction in each level
+	6. Door/Key interaction in each level
  
-	6. Prompt to play again at end screen/Involved HUD
+	7. Prompt to play again at end screen/Involved HUD
 
 ## What Makes this a Game?
 There is a main goal of bringing your pumpkin cat "home" as the sky darkens each level while escaping evil halloween enemies. You can study the map to understand the quickest or safest routes home, and there are collectibles that you are motivated to find before you can unlock doors. There is also a scoring system based on how much of the map that you explore, shown as collectible treats on screen.
